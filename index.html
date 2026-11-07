@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>El-Shifaa Specialized Clinic</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="clinic-header">
+        <div class="avatar-container">
+            <img src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2" alt="Doctor Avatar" class="doctor-avatar">
+        </div>
+        <h1>El-Shifaa Specialized Clinic</h1>
+        <p class="subtitle">Advanced Healthcare System with a Creative Touch</p>
+        
+        <nav class="clinic-nav">
+            <a href="#exterior">Exterior & Garden</a>
+            <a href="#rooms">Rooms & Beds</a>
+            <a href="#services">Services</a>
+            <a href="#doctors">Doctors & Schedule</a>
+            <a href="#registration">Patient Registration</a>
+            <a href="#contact">Contact Us</a>
+        </nav>
+    </header>
+
+    <main class="container">
+        <!-- Exterior & Custom Image Upload Section -->
+        <section id="exterior" class="card">
+            <h2>Clinic Exterior & Custom Image Upload</h2>
+            <p>Welcome to <strong>El-Shifaa Clinic</strong>. You can view the current exterior view below, or upload your own favorite garden/clinic photo directly from your device!</p>
+            
+            <div class="image-preview-box">
+                <img id="display-image" src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d" alt="Clinic Exterior" class="responsive-img">
+            </div>
+            
+            <div class="upload-control">
+                <label for="image-upload" class="upload-btn">Upload Your Own Clinic/Garden Photo:</label>
+                <input type="file" id="image-upload" accept="image/*">
+            </div>
+        </section>
+
+        <!-- Medical Facilities & Rooms Section -->
+        <section id="rooms" class="card">
+            <h2>Medical Facilities, Examination Rooms & Beds</h2>
+            <div class="grid-gallery">
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1586773860418-d37222d8fce3" alt="Medical Examination Beds" class="responsive-img">
+                    <h3>Medical Examination Beds</h3>
+                    <p>Clean, modern, and adjustable patient beds designed for maximum comfort.</p>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1516549655169-df83a0774514" alt="Waiting & Reception Hall" class="responsive-img">
+                    <h3>Waiting & Reception Hall</h3>
+                    <p>Calm and spacious seating areas for patients and visitors.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Medical Departments & Services -->
+        <section id="services" class="card">
+            <h2>Medical Departments & Services</h2>
+            <ul class="services-list">
+                <li><strong>Pediatrics Department:</strong> Comprehensive child healthcare in a calm environment.</li>
+                <li><strong>Obstetrics & Gynecology:</strong> Consultations and periodic follow-ups with advanced tech.</li>
+                <li><strong>Internal Medicine:</strong> Expert diagnosis and management of chronic and acute conditions.</li>
+                <li><strong>Orthopedics Department:</strong> Joint care, physical therapy, and injury management.</li>
+                <li><strong>Ophthalmology (Eye Clinic):</strong> Precise vision testing and eye surgeries.</li>
+            </ul>
+        </section>
+
+        <!-- Specialized Doctors & Schedule -->
+        <section id="doctors" class="card">
+            <h2>Our Specialized Doctors & Schedule (5 Expert Doctors)</h2>
+            <div class="table-container">
+                <table class="schedule-table">
+                    <thead>
+                        <tr>
+                            <th>Doctor Name</th>
+                            <th>Specialization</th>
+                            <th>Working Days</th>
+                            <th>Working Hours</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Dr. Mary Abdullah</td>
+                            <td>Pediatrics</td>
+                            <td>Sunday - Tuesday</td>
+                            <td>09:00 AM - 02:00 PM</td>
+                        </tr>
+                        <tr>
+                            <td>Dr. Lilian Ahmed</td>
+                            <td>Obstetrics & Gynecology</td>
+                            <td>Monday - Wednesday</td>
+                            <td>10:00 AM - 03:00 PM</td>
+                        </tr>
+                        <tr>
+                            <td>Dr. Ahmed Mahmoud</td>
+                            <td>Internal Medicine</td>
+                            <td>Saturday - Thursday</td>
+                            <td>01:00 PM - 07:00 PM</td>
+                        </tr>
+                        <tr>
+                            <td>Dr. Sara Khaled</td>
+                            <td>Orthopedics</td>
+                            <td>Sunday - Wednesday</td>
+                            <td>11:00 AM - 04:00 PM</td>
+                        </tr>
+                        <tr>
+                            <td>Dr. Youssef Nabil</td>
+                            <td>Ophthalmology</td>
+                            <td>Monday - Thursday</td>
+                            <td>09:30 AM - 01:30 PM</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Patient Registration Form -->
+        <section id="registration" class="card form-card">
+            <h2>Patient Registration</h2>
+            <form id="patient-form">
+                <div class="form-group">
+                    <label for="patient-name">Patient Full Name:</label>
+                    <input type="text" id="patient-name" placeholder="Enter patient name..." required>
+                </div>
+
+                <div class="form-group">
+                    <label for="patient-age">Age:</label>
+                    <input type="number" id="patient-age" placeholder="Enter age..." required>
+                </div>
+
+                <div class="form-group">
+                    <label for="patient-id">Patient ID / MR No:</label>
+                    <input type="text" id="patient-id" placeholder="Enter MR Number or National ID..." required>
+                </div>
+
+                <div class="form-group">
+                    <label for="department-select">Required Department & Doctor:</label>
+                    <select id="department-select">
+                        <option value="pediatrics">Pediatrics - Dr. Mary Abdullah</option>
+                        <option value="obgyn">Obstetrics - Dr. Lilian Ahmed</option>
+                        <option value="internal">Internal Medicine - Dr. Ahmed Mahmoud</option>
+                        <option value="ortho">Orthopedics - Dr. Sara Khaled</option>
+                        <option value="eye">Ophthalmology - Dr. Youssef Nabil</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="symptoms">Medical Notes / Symptoms:</label>
+                    <textarea id="symptoms" rows="4" placeholder="Enter medical details and symptoms..."></textarea>
+                </div>
+
+                <button type="submit" class="submit-btn">Submit Registration 🌸</button>
+            </form>
+        </section>
+
+        <!-- Contact Us -->
+        <section id="contact" class="card">
+            <h2>Contact Us</h2>
+            <p>For inquiries and appointments, email us at: <a href="mailto:info@elshifaclinic.com">info@elshifaclinic.com</a></p>
+        </section>
+    </main>
+
+    <footer class="clinic-footer">
+        <p>&copy; 2026 El-Shifaa Specialized Clinic. All Rights Reserved.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
