@@ -17,7 +17,7 @@ body {
     background-color: var(--bg-color);
     color: var(--text-color);
     line-height: 1.6;
-    direction: rtl;
+    direction: ltr;
 }
 
 .clinic-header {
@@ -110,7 +110,7 @@ body {
 .doctors-table {
     width: 100%;
     border-collapse: collapse;
-    text-align: right;
+    text-align: left;
 }
 
 .doctors-table th, .doctors-table td {
@@ -129,7 +129,7 @@ body {
 }
 
 .appointment-form {
-    text-align: right;
+    text-align: left;
 }
 
 .form-group {
