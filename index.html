@@ -1,12 +1,10 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>عيادة الشفاء التخصصية - نظام الحجز المطور</title>
+    <title>El-Shifaa Specialized Clinic</title>
     <link rel="stylesheet" href="style.css">
-    <!-- مكتبة Supabase الحديثة -->
-    <script src="https://jsdelivr.net"></script>
 </head>
 <body>
 
@@ -14,48 +12,47 @@
         <div class="avatar-container">
             <img src="https://unsplash.com" alt="Doctor Avatar" class="doctor-avatar">
         </div>
-        <h1>عيادة الشفاء التخصصية</h1>
-        <p class="subtitle">نظام الرعاية الطبية المتكامل والذكي</p>
+        <h1>El-Shifaa Specialized Clinic</h1>
+        <p class="subtitle">Integrated Smart Healthcare System</p>
         
         <nav class="clinic-nav">
-            <a href="#doctors-section">الأطباء والمواعيد</a>
-            <a href="#registration">تسجيل وحجز موعد</a>
-            <a href="#contact">بيانات الاتصال</a>
+            <a href="#doctors-section">Doctors & Schedule</a>
+            <a href="#registration">Book Appointment</a>
         </nav>
     </header>
 
     <main class="container">
         
-        <!-- قسم جدول الأطباء المتاحين في النظام -->
+        <!-- Doctors Table Section -->
         <section id="doctors-section" class="card">
-            <h2>الأطباء الاستشاريين المتاحين بالعيادة</h2>
+            <h2>Available Consultants</h2>
             <div class="table-container">
                 <table class="doctors-table">
                     <thead>
                         <tr>
-                            <th>رقم الطبيب الرقمي</th>
-                            <th>اسم الطبيب</th>
-                            <th>التخصص الطبي</th>
-                            <th>البريد الإلكتروني</th>
+                            <th>Doctor ID</th>
+                            <th>Doctor Name</th>
+                            <th>Specialization</th>
+                            <th>Email</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
                             <td><strong>1</strong></td>
-                            <td>د. أحمد علي</td>
-                            <td>طب الأطفال (Pediatrics)</td>
+                            <td>Dr. Ahmed Ali</td>
+                            <td>Pediatrics</td>
                             <td>ahmed@elshifaa.com</td>
                         </tr>
                         <tr>
                             <td><strong>2</strong></td>
-                            <td>د. فاطمة حسن</td>
-                            <td>النساء والتوليد (Gynecology)</td>
+                            <td>Dr. Fatma Hassan</td>
+                            <td>Obstetrics & Gynecology</td>
                             <td>fatma@elshifaa.com</td>
                         </tr>
                         <tr>
                             <td><strong>3</strong></td>
-                            <td>د. محمود عمر</td>
-                            <td>الأمراض الباطنية (Internal Medicine)</td>
+                            <td>Dr. Mahmoud Omar</td>
+                            <td>Internal Medicine</td>
                             <td>mahmoud@elshifaa.com</td>
                         </tr>
                     </tbody>
@@ -63,68 +60,61 @@
             </div>
         </section>
 
-        <!-- قسم استمارة الحجز والتسجيل الشاملة المتوافقة مع الـ 4 جداول -->
+        <!-- Form Section -->
         <section id="registration" class="form-card">
-            <h2 class="section-title">إدخال بيانات المريض وحجز الموعد الفوري</h2>
-            <p style="text-align: center; margin-bottom: 20px; color: #666;">يرجى ملء كافة الحقول الطبية لتسجيلك في النظام وإصدار الفاتورة تلقائياً.</p>
+            <h2 class="section-title">Patient Registration & Booking</h2>
+            <p style="text-align: center; margin-bottom: 20px; color: #666;">Please fill all fields to register and generate your invoice automatically.</p>
             
             <form id="advancedAppointmentForm" class="appointment-form">
                 
-                <h3 style="color: var(--primary-color); margin-bottom: 10px; font-size: 1.1rem; border-bottom: 1px solid var(--secondary-color); padding-bottom: 5px;">أولاً: بيانات المريض الشخصية</h3>
+                <h3 style="color: var(--primary-color); margin-bottom: 10px; font-size: 1.1rem; border-bottom: 1px solid var(--secondary-color); padding-bottom: 5px;">1. Patient Personal Info</h3>
                 <div class="form-group">
-                    <label for="patientName">الاسم الكامل للمريض:</label>
-                    <input type="text" id="patientName" placeholder="أدخل الاسم الثلاثي للمريض" required>
+                    <label for="patientName">Patient Full Name:</label>
+                    <input type="text" id="patientName" placeholder="Enter full name" required>
                 </div>
                 <div class="form-group">
-                    <label for="patientPhone">رقم الهاتف الجوال:</label>
-                    <input type="tel" id="patientPhone" placeholder="أدخل رقم الهاتف" required>
+                    <label for="patientPhone">Phone Number:</label>
+                    <input type="tel" id="patientPhone" placeholder="Enter phone number" required>
                 </div>
                 <div class="form-group">
-                    <label for="patientDOB">تاريخ الميلاد:</label>
+                    <label for="patientDOB">Date of Birth:</label>
                     <input type="date" id="patientDOB" required>
                 </div>
                 <div class="form-group">
-                    <label for="patientAddress">عنوان السكن الحالي:</label>
-                    <input type="text" id="patientAddress" placeholder="المدينة / اسم الشارع" required>
+                    <label for="patientAddress">Current Address:</label>
+                    <input type="text" id="patientAddress" placeholder="City / Street Name" required>
                 </div>
 
-                <h3 style="color: var(--primary-color); margin-top: 20px; margin-bottom: 10px; font-size: 1.1rem; border-bottom: 1px solid var(--secondary-color); padding-bottom: 5px;">ثانياً: تفاصيل الحجز والطبيب</h3>
+                <h3 style="color: var(--primary-color); margin-top: 20px; margin-bottom: 10px; font-size: 1.1rem; border-bottom: 1px solid var(--secondary-color); padding-bottom: 5px;">2. Appointment & Doctor Details</h3>
                 <div class="form-group">
-                    <label for="doctorSelect">اختر الطبيب المعالج والعيادة:</label>
+                    <label for="doctorSelect">Select Doctor:</label>
                     <select id="doctorSelect" required>
-                        <option value="" disabled selected>-- اختر الطبيب المعالج من القائمة --</option>
-                        <option value="1">د. أحمد علي - طب الأطفال</option>
-                        <option value="2">د. فاطمة حسن - النساء والتوليد</option>
-                        <option value="3">د. محمود عمر - الأمراض الباطنية</option>
+                        <option value="" disabled selected>-- Select a Doctor --</option>
+                        <option value="1">Dr. Ahmed Ali - Pediatrics</option>
+                        <option value="2">Dr. Fatma Hassan - Obstetrics & Gynecology</option>
+                        <option value="3">Dr. Mahmoud Omar - Internal Medicine</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="appointmentDate">تاريخ الحجز المطلوب:</label>
+                    <label for="appointmentDate">Appointment Date:</label>
                     <input type="date" id="appointmentDate" required>
                 </div>
                 <div class="form-group">
-                    <label for="appointmentTime">توقيت الحجز المفضل:</label>
+                    <label for="appointmentTime">Preferred Time:</label>
                     <input type="time" id="appointmentTime" required>
                 </div>
                 <div class="form-group">
-                    <label for="appointmentPurpose">الغرض الأساسي من الزيارة الطبية:</label>
-                    <textarea id="appointmentPurpose" rows="2" placeholder="استشارة، فحص دوري، أعراض معينة..." required></textarea>
+                    <label for="appointmentPurpose">Purpose of Visit:</label>
+                    <textarea id="appointmentPurpose" rows="2" placeholder="Consultation, routine checkup, symptoms..." required></textarea>
                 </div>
 
-                <button type="submit" class="submit-btn" style="margin-top: 15px;">تأكيد التسجيل وإصدار الحجز والفاتورة</button>
+                <button type="submit" class="submit-btn" style="margin-top: 15px;">Confirm Registration & Book</button>
             </form>
-        </section>
-
-        <!-- قسم بيانات الاتصال والفوتر -->
-        <section id="contact" class="card">
-            <h2>اتصل بنا</h2>
-            <p><strong>العنوان:</strong> الشارع الرئيسي، الحي الطبي، وسط المدينة</p>
-            <p><strong>رقم الهاتف:</strong> +20 123 456 7890</p>
         </section>
     </main>
 
     <footer class="clinic-footer">
-        <p>&copy; 2026 عيادة الشفاء التخصصية الذكية. جميع الحقوق محفوظة.</p>
+        <p>&copy; 2026 El-Shifaa Specialized Clinic. All rights reserved.</p>
     </footer>
 
     <script type="module" src="app.js"></script>
