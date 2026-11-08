@@ -1,4 +1,4 @@
-const SUPABASE_URL = 'https://supabase.co';
+const SUPABASE_URL = 'https://enelmbsrcfbxcnwxvmuq.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_JHskY_LMtoF4GSer-rUOzw_0NfvDHs8';
 
 async function insertToSupabase(table, data) {
