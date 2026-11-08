@@ -1,14 +1,13 @@
-import { createClient } from 'https://jsdelivr.net'
-
+// Global Supabase configuration using window object
 const supabaseUrl = 'https://supabase.co'; 
 const supabaseKey = 'sb_publishable_Lh_VOHfdnwLn2yX6_fSqpA_reR6LKQ2'; 
 
-const supabase = createClient(supabaseUrl, supabaseKey);
+const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
-// Global submit listener to intercept form submission and prevent instant reload
+// Intercept form submission to process data cleanly
 document.addEventListener('submit', async (e) => {
     if (e.target && e.target.id === 'advancedAppointmentForm') {
-        e.preventDefault(); // Stop default form redirection immediately
+        e.preventDefault(); // Stop instant page reload completely
 
         const pName = document.getElementById('patientName').value.trim();
         const pPhone = document.getElementById('patientPhone').value.trim();
@@ -21,7 +20,7 @@ document.addEventListener('submit', async (e) => {
         const appPurpose = document.getElementById('appointmentPurpose').value.trim();
 
         try {
-            // 1. Insert into PATIENT table
+            // 1. Save info into PATIENT table
             const { data: patientData, error: patientError } = await supabase
                 .from('PATIENT')
                 .insert([
@@ -40,7 +39,7 @@ document.addEventListener('submit', async (e) => {
             }
             const generatedPatientId = patientData[0].patient_id;
 
-            // 2. Insert into APPOINTMENT table
+            // 2. Save info into APPOINTMENT table
             const { data: appointmentData, error: appointmentError } = await supabase
                 .from('APPOINTMENT')
                 .insert([
@@ -65,7 +64,7 @@ document.addEventListener('submit', async (e) => {
             }
             const generatedAppointmentId = appointmentData[0].appointment_id;
 
-            // 3. Insert into BILL table
+            // 3. Generate invoice in BILL table (1:1)
             const { error: billError } = await supabase
                 .from('BILL')
                 .insert([
@@ -81,12 +80,12 @@ document.addEventListener('submit', async (e) => {
                 return;
             }
 
-            // Success alert in full clear English
+            // Pop up the definitive success message in full English
             alert('Success! Appointment booked and Bill generated successfully.');
-            e.target.reset();
+            e.target.reset(); // Refresh form fields nicely
 
         } catch (error) {
-            console.error('Unexpected Error:', error);
+            console.error('Unexpected System Error:', error);
             alert('An unexpected system error occurred: ' + error.message);
         }
     }
