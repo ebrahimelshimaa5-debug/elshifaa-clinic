@@ -1,20 +1,17 @@
 import { createClient } from 'https://jsdelivr.net'
 
-// ⚠️ ضعي الروابط والمفاتيح الثابتة الخاصة بمشروعك هنا بين القوسين:
 const supabaseUrl = 'https://supabase.co'; 
 const supabaseKey = 'sb_publishable_Lh_VOHfdnwLn2yX6_fSqpA_reR6LKQ2'; 
 
-export const supabase = createClient(supabaseUrl, supabaseKey);
+const supabase = createClient(supabaseUrl, supabaseKey);
 
-// الانتظار حتى تحميل عناصر الصفحة بالكامل
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('advancedAppointmentForm');
 
     if (form) {
         form.addEventListener('submit', async (e) => {
-            e.preventDefault(); // منع إعادة تحميل الصفحة
+            e.preventDefault(); 
 
-            // 1. جلب قيم الحقول الطبية والشخصية من الاستمارة
             const pName = document.getElementById('patientName').value.trim();
             const pPhone = document.getElementById('patientPhone').value.trim();
             const pDOB = document.getElementById('patientDOB').value;
@@ -26,19 +23,26 @@ document.addEventListener('DOMContentLoaded', () => {
             const appPurpose = document.getElementById('appointmentPurpose').value.trim();
 
             try {
-                // الخطوة أ: إدخال بيانات المريض في جدول PATIENT وجلب الـ ID الخاص به تلقائياً
+                // 1. Insert into PATIENT table
                 const { data: patientData, error: patientError } = await supabase
                     .from('PATIENT')
                     .insert([
                         { name: pName, phone: pPhone, date_of_birth: pDOB, address: pAddress }
                     ])
-                    .select('patient_id')
-                    .single();
+                    .select(); 
 
-                if (patientError) throw new Error('خطأ أثناء تسجيل بيانات المريض: ' + patientError.message);
-                const generatedPatientId = patientData.patient_id;
+                if (patientError) {
+                    alert('Patient Table Error: ' + patientError.message);
+                    return;
+                }
 
-                // الخطوة ب: استخدام الـ patient_id لإنشاء الحجز في جدول APPOINTMENT
+                if (!patientData || patientData.length === 0) {
+                    alert('Error: No patient data returned from server.');
+                    return;
+                }
+                const generatedPatientId = patientData[0].patient_id;
+
+                // 2. Insert into APPOINTMENT table
                 const { data: appointmentData, error: appointmentError } = await supabase
                     .from('APPOINTMENT')
                     .insert([
@@ -50,32 +54,41 @@ document.addEventListener('DOMContentLoaded', () => {
                             doctor_id: parseInt(selectedDoctorId) 
                         }
                     ])
-                    .select('appointment_id')
-                    .single();
+                    .select();
 
-                if (appointmentError) throw new Error('خطأ أثناء إنشاء الموعد الطبي: ' + appointmentError.message);
-                const generatedAppointmentId = appointmentData.appointment_id;
+                if (appointmentError) {
+                    alert('Appointment Table Error: ' + appointmentError.message);
+                    return;
+                }
 
-                // الخطوة ج: توليد الفاتورة التلقائية المرتبطة بالحجز في جدول BILL (العلاقة 1:1)
+                if (!appointmentData || appointmentData.length === 0) {
+                    alert('Error: No appointment data returned from server.');
+                    return;
+                }
+                const generatedAppointmentId = appointmentData[0].appointment_id;
+
+                // 3. Insert into BILL table (1:1 Relation)
                 const { error: billError } = await supabase
                     .from('BILL')
                     .insert([
                         { 
-                            amount: 150.00, // قيمة الكشف الافتراضية بالعيادة
-                            payment_status: 'Unpaid', // الحالة الافتراضية غير مدفوع لحين السداد
+                            amount: 150.00, 
+                            payment_status: 'Unpaid', 
                             appointment_id: generatedAppointmentId 
                         }
                     ]);
 
-                if (billError) throw new Error('خطأ أثناء توليد الفاتورة المالية للزيارة: ' + billError.message);
+                if (billError) {
+                    alert('Bill Table Error: ' + billError.message);
+                    return;
+                }
 
-                // إذا تمت العمليات الثلاث المترابطة بنجاح كامل بدون توقف
-                alert('🎉 ممتاز! تم تسجيل المريض، وتأكيد الحجز بنجاح، وإصدار الفاتورة في النظام بملفاتك الثابتة!');
+                alert('Success! Appointment booked and Bill generated successfully.');
                 form.reset();
 
             } catch (error) {
-                console.error('❌ فشل النظام في معالجة الحجز المترابط:', error.message);
-                alert('حدث خطأ في الشبكة أو البيانات: ' + error.message);
+                console.error('Unexpected Error:', error);
+                alert('An unexpected system error occurred. Please try again.');
             }
         });
     }
