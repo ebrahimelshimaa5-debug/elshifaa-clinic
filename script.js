@@ -1,88 +1,82 @@
-const SUPABASE_URL = 'https://enelmbsrcfbxcnwxvmuq.supabase.co';
-const SUPABASE_ANON_KEY = 'sb_publishable_JHskY_LMtoF4GSer-rUOzw_0NfvDHs8';
+import { createClient } from 'https://jsdelivr.net'
 
-async function insertToSupabase(table, data) {
-    const response = await fetch(`${SUPABASE_URL}/rest/v1/${table}`, {
-        method: 'POST',
-        headers: {
-            'apikey': SUPABASE_ANON_KEY,
-            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-            'Content-Type': 'application/json',
-            'Prefer': 'return=minimal'
-        },
-        body: JSON.stringify(data)
-    });
-    if (!response.ok) {
-        const error = await response.json();
-        throw new Error(`Failed inserting into ${table}: ${error.message}`);
-    }
-}
+// ⚠️ ضعي الروابط والمفاتيح الثابتة الخاصة بمشروعك هنا بين القوسين:
+const supabaseUrl = 'https://supabase.co'; 
+const supabaseKey = 'sb_publishable_Lh_VOHfdnwLn2yX6_fSqpA_reR6LKQ2'; 
 
-async function seedDoctors() {
-    const doctorsList = [
-        { doctor_id: 'DOC01', name: 'Dr. Mary Abdullah', specialization: 'Pediatrics', email: 'mary@shifaclinic.com' },
-        { doctor_id: 'DOC02', name: 'Dr. Lilian Ahmed', specialization: 'Obstetrics & Gynecology', email: 'lilian@shifaclinic.com' },
-        { doctor_id: 'DOC03', name: 'Dr. Ahmed Mahmoud', specialization: 'Internal Medicine', email: 'ahmed@shifaclinic.com' }
-    ];
-    for (const doc of doctorsList) {
-        try { await insertToSupabase('doctors', doc); } catch(e) { }
-    }
-}
+export const supabase = createClient(supabaseUrl, supabaseKey);
 
-document.getElementById('patient-form').addEventListener('submit', async function(e) {
-    e.preventDefault(); 
+// الانتظار حتى تحميل عناصر الصفحة بالكامل
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('advancedAppointmentForm');
 
-    await seedDoctors();
+    if (form) {
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault(); // منع إعادة تحميل الصفحة
 
-    const patientId = document.getElementById('patient-id').value;
-    const appointmentId = document.getElementById('appointment-id').value;
-    const billId = document.getElementById('bill-id').value;
+            // 1. جلب قيم الحقول الطبية والشخصية من الاستمارة
+            const pName = document.getElementById('patientName').value.trim();
+            const pPhone = document.getElementById('patientPhone').value.trim();
+            const pDOB = document.getElementById('patientDOB').value;
+            const pAddress = document.getElementById('patientAddress').value.trim();
 
-    const patientEntity = {
-        patient_id: patientId,
-        name: document.getElementById('patient-name').value,
-        date_of_birth: document.getElementById('patient-dob').value,
-        phone: document.getElementById('patient-phone').value,
-        address: document.getElementById('patient-address').value
-    };
+            const selectedDoctorId = document.getElementById('doctorSelect').value;
+            const appDate = document.getElementById('appointmentDate').value;
+            const appTime = document.getElementById('appointmentTime').value;
+            const appPurpose = document.getElementById('appointmentPurpose').value.trim();
 
-    const appointmentEntity = {
-        appointment_id: appointmentId,
-        date: document.getElementById('appointment-date').value,
-        time: document.getElementById('appointment-time').value,
-        purpose: document.getElementById('purpose').value,
-        patient_id: patientId,
-        doctor_id: document.getElementById('doctor-select').value
-    };
+            try {
+                // الخطوة أ: إدخال بيانات المريض في جدول PATIENT وجلب الـ ID الخاص به تلقائياً
+                const { data: patientData, error: patientError } = await supabase
+                    .from('PATIENT')
+                    .insert([
+                        { name: pName, phone: pPhone, date_of_birth: pDOB, address: pAddress }
+                    ])
+                    .select('patient_id')
+                    .single();
 
-    const billEntity = {
-        bill_id: billId,
-        date_issued: document.getElementById('appointment-date').value, 
-        amount: parseFloat(document.getElementById('bill-amount').value),
-        payment_status: document.getElementById('payment-status').value,
-        appointment_id: appointmentId
-    };
+                if (patientError) throw new Error('خطأ أثناء تسجيل بيانات المريض: ' + patientError.message);
+                const generatedPatientId = patientData.patient_id;
 
-    try {
-        await insertToSupabase('patients', patientEntity);
-        await insertToSupabase('appointments', appointmentEntity);
-        await insertToSupabase('bills', billEntity);
+                // الخطوة ب: استخدام الـ patient_id لإنشاء الحجز في جدول APPOINTMENT
+                const { data: appointmentData, error: appointmentError } = await supabase
+                    .from('APPOINTMENT')
+                    .insert([
+                        { 
+                            date: appDate, 
+                            time: appTime, 
+                            purpose: appPurpose, 
+                            patient_id: generatedPatientId, 
+                            doctor_id: parseInt(selectedDoctorId) 
+                        }
+                    ])
+                    .select('appointment_id')
+                    .single();
 
-        alert(`🌸 Transaction Complete!\nPatient, Appointment, and Bill records have been successfully linked and saved in Supabase Database!`);
-        this.reset();
-    } catch (error) {
-        console.error(error);
-        alert('An error occurred during submission. Please verify your unique IDs and try again.');
-    }
-});
+                if (appointmentError) throw new Error('خطأ أثناء إنشاء الموعد الطبي: ' + appointmentError.message);
+                const generatedAppointmentId = appointmentData.appointment_id;
 
-document.getElementById('image-upload').addEventListener('change', function(event) {
-    const file = event.target.files;
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            document.getElementById('display-image').src = e.target.result;
-        }
-        reader.readAsDataURL(file);
+                // الخطوة ج: توليد الفاتورة التلقائية المرتبطة بالحجز في جدول BILL (العلاقة 1:1)
+                const { error: billError } = await supabase
+                    .from('BILL')
+                    .insert([
+                        { 
+                            amount: 150.00, // قيمة الكشف الافتراضية بالعيادة
+                            payment_status: 'Unpaid', // الحالة الافتراضية غير مدفوع لحين السداد
+                            appointment_id: generatedAppointmentId 
+                        }
+                    ]);
+
+                if (billError) throw new Error('خطأ أثناء توليد الفاتورة المالية للزيارة: ' + billError.message);
+
+                // إذا تمت العمليات الثلاث المترابطة بنجاح كامل بدون توقف
+                alert('🎉 ممتاز! تم تسجيل المريض، وتأكيد الحجز بنجاح، وإصدار الفاتورة في النظام بملفاتك الثابتة!');
+                form.reset();
+
+            } catch (error) {
+                console.error('❌ فشل النظام في معالجة الحجز المترابط:', error.message);
+                alert('حدث خطأ في الشبكة أو البيانات: ' + error.message);
+            }
+        });
     }
 });
