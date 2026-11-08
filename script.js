@@ -1,8 +1,6 @@
-// 1. إعدادات الربط الحقيقية والنهائية بقاعدة بيانات عيادة الشفاء المتخصصة في Supabase
 const SUPABASE_URL = 'https://supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_JHskY_LMtoF4GSer-rUOzw_0NfvDHs8';
 
-// الدالات المساعدة للتحدث مع قاعدة البيانات السحابية مباشرة عبر الـ Fetch API
 async function insertToSupabase(table, data) {
     const response = await fetch(`${SUPABASE_URL}/rest/v1/${table}`, {
         method: 'POST',
@@ -20,7 +18,6 @@ async function insertToSupabase(table, data) {
     }
 }
 
-// دالة بذر كود الأطباء تلقائياً لمنع أخطاء العلاقات المترابطة (Foreign Keys)
 async function seedDoctors() {
     const doctorsList = [
         { doctor_id: 'DOC01', name: 'Dr. Mary Abdullah', specialization: 'Pediatrics', email: 'mary@shifaclinic.com' },
@@ -28,18 +25,15 @@ async function seedDoctors() {
         { doctor_id: 'DOC03', name: 'Dr. Ahmed Mahmoud', specialization: 'Internal Medicine', email: 'ahmed@shifaclinic.com' }
     ];
     for (const doc of doctorsList) {
-        try { await insertToSupabase('doctors', doc); } catch(e) { /* تم إدخالهم مسبقاً وتجاهل التكرار */ }
+        try { await insertToSupabase('doctors', doc); } catch(e) { }
     }
 }
 
-// 2. معالجة إرسال الفورم وحفظ العملية كاملة بالتسلسل الهندسي الصحيح
 document.getElementById('patient-form').addEventListener('submit', async function(e) {
     e.preventDefault(); 
 
-    // تأمين وجود الأطباء في النظام أولاً
     await seedDoctors();
 
-    // تجميع الكيانات الأربعة المتوافقة مع الـ ER Diagram الخاص بكِ
     const patientId = document.getElementById('patient-id').value;
     const appointmentId = document.getElementById('appointment-id').value;
     const billId = document.getElementById('bill-id').value;
@@ -70,7 +64,6 @@ document.getElementById('patient-form').addEventListener('submit', async functio
     };
 
     try {
-        // تنفيذ خطوات الحفظ المتسلسلة والمترابطة حقيقياً أونلاين
         await insertToSupabase('patients', patientEntity);
         await insertToSupabase('appointments', appointmentEntity);
         await insertToSupabase('bills', billEntity);
@@ -83,7 +76,6 @@ document.getElementById('patient-form').addEventListener('submit', async functio
     }
 });
 
-// وظيفة التعامل مع رفع الصورة المخصصة من جهاز المستخدم (كودك الأصلي)
 document.getElementById('image-upload').addEventListener('change', function(event) {
     const file = event.target.files;
     if (file) {
